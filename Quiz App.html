@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>QUIZ</title>     
+<link rel="stylesheet" type="text/css" href="quiz.css">
+<link rel="stylesheet" type="text/css" href="submit UI Screen.css"> 
+</head>
+<body>
+<header class="row" id="row">
+    <h1 class="blink">
+        <span class="none"> Simple Minds</span>
+    </h1>
+    <div id="timer">
+        <span  id="meter">60</span> sec
+    </div>
+     <a class="stop" href="#" > Time Left</a>
+</header>
+
+<div class="blocks">
+	
+		<div class="no1">
+            <h2 id="question"></h2>
+         
+         <div class="options">
+
+		<input type="radio" onclick="radio('a')" value="a" name="correct" class="option"> <label id="option1" for="a"></label><br><br>
+		<input type="radio" onclick="radio('b')" value="b" name="correct" class="option"> <label id="option2" for="b"></label><br><br>
+		<input type="radio" onclick="radio('c')" value="c" name="correct" class="option"> <label id="option3" for="c"></label><br><br>
+		<input type="radio" onclick="radio('d')" value="d" name="correct" class="option"> <label id="option4" for="d"></label>
+
+	     </div>
+   
+        <div class="next">
+                        <input id="next" type="button" name="Next" value="Next">
+        </div>
+       </div>
+
+</div>
+
+
+
+<script type="text/javascript">
+var questionJson = {
+    "quiz": [{
+     "Q1":"1. which programming language is easy to learn?",
+     "answer":["c","c#","java","javascript"],
+     "final_answer":"a",
+    },
+
+    {
+     "Q1":"2. Who among the following was the first Indian woman who went into space?",
+     "answer":["Kalpana Chawla","Sunitha Williams","Koneru Humpy","None of the above"],
+     "final_answer":"a",
+    },
+
+    {
+     "Q1":"3. Who is the first Indian to win a Nobel Prize?",
+     "answer":["Rabindranath Tagore","CV Raman","Mother Teresa","Hargobind Khorana"],
+     "final_answer":"a"
+
+    },
+
+    {
+     "Q1":"4. Who was the first Indian to go to space?",
+     "answer":["Vikram Ambalal","Ravish Malhotra","Rakesh Sharma","Nagapathi Bhat",],
+     "final_answer":"c",
+    },
+
+     {
+     "Q1":"5. Who among the following was the first man to climb Mount Everest without supplemental oxygen?",
+     "answer":["Junko Tabei","Reinhold Messner","Duncan Chessell","Phu Dorji",],
+     "final_answer":"b",
+    },
+
+     {
+     "Q1":"6. Who built the Jama Masjid?",
+     "answer":["Jahangir","Akbar","Imam Bukhari","Shah jahan",],
+     "final_answer":"d",
+    },
+
+     {
+     "Q1":"7. Who wrote the Indian National Anthem?",
+     "answer":["Bankim Chandra Chatterji","Rabindranath Tagore","Swami Vivekanand","None of the above",],
+     "final_answer":"b",
+    },
+
+     {
+     "Q1":"8. Who was the first Indian woman to win the Miss World Title?",
+     "answer":["Aishwarya Rai","Sushmita Sen","Reita Faria","Diya Mirza",],
+     "final_answer":"c",
+    },
+
+     {
+     "Q1":"9. Who was the first President of India?",
+     "answer":["Dr.Rajendra Prasadh","Lal Bahudur Shastri ","Abdul Kalam","Zakir Hussain",],
+     "final_answer":"a"
+    },
+
+     {
+     "Q1":"10. Who was the first Indian win the Booker Prize?",
+     "answer":["Dhan Gopal Mukerji","Nirad C. Chaudhuri","Arundhati Roy","Aravind Adiga",],
+     "final_answer":"c"
+    },
+     
+
+
+]}
+
+
+var active=0;
+updateDom(active);
+
+
+var nextButton= document.getElementById('next');
+nextButton.addEventListener("click", next);
+
+/*var previousButton=document.getElementById('previous');
+previousButton.addEventListener("click",prev);
+
+function prev() {
+    if(active > 0){
+        active=active-1;
+        updateDom(active);
+    }else{
+        alert('no previous questions');
+    }
+}*/
+
+function next(){
+    if(active<questionJson.quiz.length-1){
+        active=active+1;
+        updateDom(active);
+        afternext();
+        clearInterval(window.downloadTimer)
+        timer(61);
+
+    }
+    else{
+        aftersubmit();
+       
+        }
+}
+function aftersubmit(){
+    var r = confirm('Do you want to submit');
+    if(r == true){
+       // window.location = 'https://jagansai99.github.io/submitquiz/submit%20UI.html'
+       submitblock()
+
+    }
+
+}
+
+
+function radio(z){
+    // alert(z);
+    questionJson['quiz'][active]['my_answer'] = z;
+    console.log(questionJson);
+}
+
+function afternext(c){
+    // alert(c);
+    document.getElementsByClassName('option')[0].checked = false;
+    document.getElementsByClassName('option')[1].checked = false;
+    document.getElementsByClassName('option')[2].checked = false;
+    document.getElementsByClassName('option')[3].checked = false;
+    
+}
+
+
+
+
+function updateDom(a){
+    
+
+    var question = document.getElementById('question');
+    question.innerText = questionJson['quiz'][a]['Q1'];
+
+    var option1= document.getElementById('option1');
+    option1.innerText=questionJson['quiz'][a]['answer'][0];
+
+    var option2=document.getElementById('option2');
+    option2.innerText=questionJson['quiz'][a]['answer'][1];
+
+    var option3=document.getElementById('option3');
+    option3.innerText=questionJson['quiz'][a]['answer'][2];
+
+    var option4=document.getElementById('option4');
+    option4.innerText=questionJson['quiz'][a]['answer'][3];
+
+}
+
+
+function timer(j){
+
+var timeleft=j;
+window.downloadTimer = setInterval(function(){
+    timeleft=timeleft-1;
+    if(timeleft<=10){
+       document.getElementById('meter').style.color='red';
+    }
+
+     document.getElementById("meter").innerText=timeleft;
+    if(timeleft<=0){
+        clearInterval(window.downloadTimer);
+            if(active<questionJson.quiz.length-1){
+            active=active+1;
+            updateDom(active);
+            }
+            else{
+                alert('Your time is up');
+                window.location='https://jagansai99.github.io/submitquiz/submit%20UI.html'
+            }
+
+        updateDom(active++);
+        timer(61);
+    }
+},1000);
+}
+
+
+timer(61);
+
+//  After submit
+
+function submitblock(){
+
+
+
+var html = `<h1 class="youranswer">*Your Answers*</h1>
+            <div id="indicator">
+                <input class="bo"type="button" name="color"><span class="Default">Default</span><br><br>
+                <input class="no" type="button" name="color" ><span class="wrong">Wrong Answer</span><br><br>
+               <input class="mo"type="button" name="color"><span class="right">Right Answer</span>
+            </div>`;
+for (var i = 0; i <= questionJson.quiz.length - 1; i++) {
+    console.log(questionJson.quiz[i]);
+    html = html + `<div class="font">`+questionJson.quiz[i]['Q1']+`</div>
+                    <div class="optionClass" id="a`+i+`">a.`+questionJson.quiz[i]['answer'][0]+`</div><br>
+                    <div class="optionClass" id="b`+i+`">b.`+questionJson.quiz[i]['answer'][1]+`</div><br>
+                    <div class="optionClass" id="c`+i+`">c.`+questionJson.quiz[i]['answer'][2]+`</div><br>
+                    <div class="optionClass" id="d`+i+`">d.`+questionJson.quiz[i]['answer'][3]+`</div>`;      
+}
+
+
+
+document.getElementsByTagName('body')[0].innerHTML = html;
+marks=0;
+for (var i = 0; i <= questionJson.quiz.length - 1; i++) {
+
+    if(questionJson.quiz[i]['my_answer']==questionJson.quiz[i]['final_answer']){
+      marks=marks+1;
+    }
+      
+    
+
+    if (questionJson.quiz[i]['my_answer']== 'a') {
+        document.getElementById('a'+i).style.backgroundColor = 'red';
+    }else if(questionJson.quiz[i]['my_answer'] == 'b'){ 
+        document.getElementById('b'+i).style.backgroundColor = 'red';
+    }else if(questionJson.quiz[i]['my_answer'] == 'c'){
+        document.getElementById('c'+i).style.backgroundColor = 'red';
+    }else if(questionJson.quiz[i]['my_answer'] == 'd'){
+        document.getElementById('d'+i).style.backgroundColor = 'red';
+    }
+
+    if (questionJson.quiz[i]['final_answer']== 'a') {
+        document.getElementById('a'+i).style.backgroundColor = 'green';
+    }else if(questionJson.quiz[i]['final_answer'] == 'b'){
+        document.getElementById('b'+i).style.backgroundColor = 'green';
+    }else if(questionJson.quiz[i]['final_answer'] == 'c'){
+        document.getElementById('c'+i).style.backgroundColor = 'green';
+    }else if(questionJson.quiz[i]['final_answer'] == 'd'){
+        document.getElementById('d'+i).style.backgroundColor = 'green';
+    }
+}
+console.log(marks);
+
+}
+
+
+</script>
+</body>
+</html>
+
